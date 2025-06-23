@@ -1,262 +1,411 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Tactical Precision Trainer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --accent: #00bfff; /* Blu elettrico */
-      --correct: #00ff66;
-      --wrong: #ff4444;
-      --bg: #0f0f10;
-      --panel: #1b1c1f;
-      --text: #e0e0e0;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      --radius: 12px;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tactical Precision Trainer v1.3</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --accent-blue: #00bfff;
+    --accent-orange: #ff7f00;
+    --correct: #00ff66;
+    --wrong: #ff4444;
+    --bg-dark: #0f0f10;
+    --panel-dark: #1b1c1f;
+    --text-light: #e0e0e0;
+    --shadow-soft: 0 4px 12px rgba(0,0,0,0.4);
+    --radius: 12px;
+  }
 
-    body {
-      margin: 0;
-      padding: 30px;
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      max-width: 800px;
-      margin-inline: auto;
-    }
+  body {
+    margin: 0;
+    padding: 30px 15px;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
 
-    h1 {
-      text-align: center;
-      color: var(--accent);
-      font-size: 26px;
-      margin-bottom: 30px;
-    }
+  /* THEMES */
+  body[data-theme="blue"] {
+    --accent: var(--accent-blue);
+  }
+  body[data-theme="orange"] {
+    --accent: var(--accent-orange);
+  }
+  /* default theme */
+  body:not([data-theme]) {
+    --accent: var(--accent-blue);
+  }
 
+  h1 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 28px;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+  }
+
+  .input-group {
+    background-color: var(--panel-dark);
+    padding: 18px 22px;
+    margin-bottom: 18px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+
+  label {
+    font-weight: 600;
+    flex: 1;
+  }
+
+  input[type="number"],
+  input.targa-input {
+    background-color: #25262a;
+    border: none;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    color: white;
+    font-size: 16px;
+    width: 80px;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+
+  input[type="number"]:focus,
+  input.targa-input:focus {
+    background-color: #33353a;
+  }
+
+  button {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 12px var(--accent);
+    transition: background-color 0.2s ease, box-shadow 0.3s ease;
+    display: block;
+    margin: 15px auto 0;
+    min-width: 160px;
+  }
+
+  button:hover {
+    background-color: #0099cc;
+    box-shadow: 0 8px 20px #0099ccaa;
+  }
+
+  .countdown {
+    text-align: center;
+    font-size: 22px;
+    color: var(--wrong);
+    font-weight: 700;
+    margin-top: 10px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-out {
+    opacity: 0 !important;
+  }
+
+  .targa {
+    text-align: center;
+    font-size: 36px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin: 15px 0;
+    user-select: none;
+  }
+
+  .box {
+    background-color: var(--panel-dark);
+    padding: 22px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    margin-top: 30px;
+    transition: opacity 0.5s ease;
+  }
+
+  .carattere-giusto {
+    color: var(--correct);
+    font-weight: 700;
+  }
+
+  .carattere-sbagliato {
+    color: var(--wrong);
+    font-weight: 700;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 15px 0;
+  }
+
+  /* Inputs container */
+  #inputContainer input.targa-input {
+    display: block;
+    margin: 12px auto;
+    width: 160px;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 10px 14px;
+    background-color: #25262a;
+    border-radius: var(--radius);
+    border: none;
+    color: white;
+    text-transform: uppercase;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  #inputContainer input.targa-input:focus {
+    background-color: #33353a;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
     .input-group {
-      background-color: var(--panel);
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 8px;
     }
-
     label {
-      font-weight: 600;
-      flex: 1;
+      flex: none;
     }
+    input[type="number"] {
+      width: 100%;
+    }
+    #inputContainer input.targa-input {
+      width: 100%;
+      font-size: 18px;
+    }
+  }
 
-    input[type="number"],
-    input.targa-input {
-      background-color: #25262a;
-      border: none;
-      padding: 8px 10px;
-      border-radius: var(--radius);
-      color: white;
-      font-size: 16px;
-      width: 80px;
-      outline: none;
-    }
+  /* Toggle switch for theme */
+  .theme-switch-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
-    button {
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: var(--radius);
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
+  .theme-switch {
+    display: inline-block;
+    height: 28px;
+    position: relative;
+    width: 60px;
+  }
 
-    button:hover {
-      background-color: #0099cc;
-    }
+  .theme-switch input {
+    display:none;
+  }
 
-    .countdown {
-      text-align: center;
-      font-size: 20px;
-      color: var(--wrong);
-      font-weight: bold;
-      margin-top: 10px;
-    }
+  .slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
 
-    .targa {
-      text-align: center;
-      font-size: 32px;
-      color: var(--accent);
-      letter-spacing: 3px;
-      margin: 10px 0;
-    }
+  .slider:before {
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 20px;
+    left: 4px;
+    position: absolute;
+    transition: 0.4s;
+    width: 20px;
+    border-radius: 50%;
+  }
 
-    .box {
-      background-color: var(--panel);
-      padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-top: 20px;
-    }
+  input:checked + .slider {
+    background-color: var(--accent-orange);
+  }
 
-    .carattere-giusto {
-      color: var(--correct);
-      font-weight: bold;
-    }
+  input:checked + .slider:before {
+    transform: translateX(32px);
+  }
 
-    .carattere-sbagliato {
-      color: var(--wrong);
-      font-weight: bold;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #333;
-      margin: 15px 0;
-    }
-
-    .footer {
-      margin-top: 50px;
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-    }
-  </style>
+</style>
 </head>
-<body>
+<body data-theme="blue">
 
-  <h1>🎯 Tactical Precision Trainer</h1>
+<h1>
+  Tactical Precision Trainer
+</h1>
 
-  <div class="input-group">
-    <label for="numTarghe">Numero di targhe:</label>
-    <input type="number" id="numTarghe" min="1" max="10" value="3">
-  </div>
+<div class="theme-switch-wrapper" title="Cambia tema blu/arancione">
+  <label class="theme-switch" for="checkbox-theme">
+    <input type="checkbox" id="checkbox-theme" />
+    <span class="slider"></span>
+  </label>
+</div>
 
-  <div class="input-group">
-    <label for="tempoMem">Tempo per memorizzare (secondi):</label>
-    <input type="number" id="tempoMem" min="1" max="30" value="5">
-  </div>
+<div class="input-group">
+  <label for="numTarghe">Numero di targhe:</label>
+  <input type="number" id="numTarghe" min="1" max="10" value="3" />
+</div>
 
-  <div style="text-align: center;">
-    <button onclick="iniziaTest()">Inizia Addestramento</button>
-    <div id="countdown" class="countdown"></div>
-  </div>
+<div class="input-group">
+  <label for="tempoMem">Tempo per memorizzare (secondi):</label>
+  <input type="number" id="tempoMem" min="1" max="30" value="5" />
+</div>
 
-  <div id="targheContainer"></div>
-  <div id="inputContainer"></div>
-  <div id="risultati" class="box"></div>
+<div style="text-align:center;">
+  <button id="startBtn">Inizia Addestramento</button>
+  <div id="countdown" class="countdown"></div>
+</div>
 
-  <div class="footer">
-    Tactical Suite v1.2 — Gabri / Operazione Corvo 🕶️
-  </div>
+<div id="targheContainer"></div>
+<div id="inputContainer"></div>
+<div id="risultati" class="box"></div>
 
-  <script>
-    const lettereConsentite = "ABCDEFGHJKLMNPRSTVWXYZ";
-
-    function generaTarga() {
-      const randLettere = () => lettereConsentite.charAt(Math.floor(Math.random() * lettereConsentite.length));
-      const randNumero = () => Math.floor(Math.random() * 10);
-      return (
-        randLettere() + randLettere() +
-        randNumero() + randNumero() + randNumero() +
-        randLettere() + randLettere()
-      );
-    }
-
-    function iniziaTest() {
-      const num = parseInt(document.getElementById("numTarghe").value);
-      const tempo = parseInt(document.getElementById("tempoMem").value);
-      const targhe = Array.from({ length: num }, () => generaTarga());
-
-      document.getElementById("targheContainer").innerHTML = '';
-      document.getElementById("inputContainer").innerHTML = '';
-      document.getElementById("risultati").innerHTML = '';
-      const countdown = document.getElementById("countdown");
-
-      targhe.forEach(t => {
-        const el = document.createElement("div");
-        el.className = "targa";
-        el.textContent = t;
-        document.getElementById("targheContainer").appendChild(el);
-      });
-
-      let secondsLeft = tempo;
-      countdown.textContent = `⏳ ${secondsLeft}s`;
-
-      const interval = setInterval(() => {
-        secondsLeft--;
-        countdown.textContent = `⏳ ${secondsLeft}s`;
-        if (secondsLeft <= 0) {
-          clearInterval(interval);
-          countdown.textContent = '';
-          mostraInput(targhe);
-        }
-      }, 1000);
-    }
-
-    function mostraInput(targhe) {
-      document.getElementById("targheContainer").innerHTML = '';
-      const inputContainer = document.getElementById("inputContainer");
-      inputContainer.innerHTML = '';
-
-      targhe.forEach((_, i) => {
-        const input = document.createElement("input");
-        input.className = "targa-input";
-        input.maxLength = 7;
-        input.placeholder = `Targa ${i + 1}`;
-        input.style.display = "block";
-        input.style.margin = "10px auto";
-        inputContainer.appendChild(input);
-      });
-
-      const btn = document.createElement("button");
-      btn.textContent = "Verifica";
-      btn.style.marginTop = "15px";
-      btn.onclick = () => verifica(targhe);
-      inputContainer.appendChild(btn);
-    }
-
-    function verifica(targhe) {
-      const inputs = document.querySelectorAll(".targa-input");
-      const risultati = document.getElementById("risultati");
-      risultati.innerHTML = '';
-
-      let corrette = 0;
-
-      targhe.forEach((corretta, i) => {
-        const risposta = (inputs[i].value || '').toUpperCase().trim();
-        let confronto = '';
-        let match = 0;
-
-        for (let j = 0; j < 7; j++) {
-          const userChar = risposta[j] || '';
-          const trueChar = corretta[j];
-          if (userChar === trueChar) {
-            confronto += `<span class="carattere-giusto">${userChar}</span>`;
-            match++;
-          } else {
-            confronto += `<span class="carattere-sbagliato">${userChar || '_'}</span>`;
-          }
-        }
-
-        const precisione = ((match / 7) * 100).toFixed(1);
-        if (match === 7) corrette++;
-
-        risultati.innerHTML += `
-          <div style="margin-bottom: 20px;">
-            <strong>Targa ${i + 1}</strong><br>
-            Corretta: <span class="carattere-giusto">${corretta}</span><br>
-            Tua risposta: ${confronto}<br>
-            Precisione: ${precisione}% (${match}/7)
-          </div>
-          <hr>
-        `;
-      });
-
-      risultati.innerHTML += `<strong>✅ Totale corrette: ${corrette} su ${targhe.length}</strong>`;
-    }
-  </script>
 </body>
-</html>
+<script>
+  const lettereConsentite = "ABCDEFGHJKLMNPRSTVWXYZ";
+
+  const checkboxTheme = document.getElementById('checkbox-theme');
+  checkboxTheme.addEventListener('change', () => {
+    document.body.setAttribute('data-theme', checkboxTheme.checked ? 'orange' : 'blue');
+  });
+
+  function generaTarga() {
+    const randLettere = () => lettereConsentite.charAt(Math.floor(Math.random() * lettereConsentite.length));
+    const randNumero = () => Math.floor(Math.random() * 10);
+    return (
+      randLettere() + randLettere() +
+      randNumero() + randNumero() + randNumero() +
+      randLettere() + randLettere()
+    );
+  }
+
+  let intervalId;
+
+  function iniziaTest() {
+    clearInterval(intervalId);
+
+    const num = parseInt(document.getElementById("numTarghe").value);
+    const tempo = parseInt(document.getElementById("tempoMem").value);
+    if (isNaN(num) || num < 1 || num > 10) return alert("Inserisci un numero di targhe da 1 a 10.");
+    if (isNaN(tempo) || tempo < 1 || tempo > 30) return alert("Inserisci un tempo da 1 a 30 secondi.");
+
+    const targhe = Array.from({ length: num }, () => generaTarga());
+
+    const targheContainer = document.getElementById("targheContainer");
+    const inputContainer = document.getElementById("inputContainer");
+    const risultati = document.getElementById("risultati");
+    const countdown = document.getElementById("countdown");
+
+    targheContainer.innerHTML = "";
+    inputContainer.innerHTML = "";
+    risultati.innerHTML = "";
+    countdown.classList.remove("fade-out");
+    countdown.style.opacity = "1";
+
+    targhe.forEach(t => {
+      const el = document.createElement("div");
+      el.className = "targa";
+      el.textContent = t;
+      targheContainer.appendChild(el);
+    });
+
+    let secondsLeft = tempo;
+    countdown.textContent = `⏳ ${secondsLeft}s`;
+
+    intervalId = setInterval(() => {
+      secondsLeft--;
+      countdown.textContent = `⏳ ${secondsLeft}s`;
+      if (secondsLeft <= 0) {
+        clearInterval(intervalId);
+        countdown.textContent = "";
+        countdown.classList.add("fade-out");
+        targheContainer.innerHTML = "";
+        mostraInput(targhe);
+      }
+    }, 1000);
+  }
+
+  function mostraInput(targhe) {
+    const inputContainer = document.getElementById("inputContainer");
+    inputContainer.innerHTML = "";
+
+    targhe.forEach((_, i) => {
+      const input = document.createElement("input");
+      input.className = "targa-input";
+      input.maxLength = 7;
+      input.placeholder = `Targa ${i + 1}`;
+      input.autocomplete = "off";
+      input.autocorrect = "off";
+      input.autocapitalize = "characters";
+      input.spellcheck = false;
+      inputContainer.appendChild(input);
+    });
+
+    const btn = document.createElement("button");
+    btn.textContent = "Verifica";
+    btn.onclick = () => verifica(targhe);
+    inputContainer.appendChild(btn);
+
+    inputContainer.querySelector("input.targa-input").focus();
+  }
+
+  function verifica(targhe) {
+    const inputs = document.querySelectorAll(".targa-input");
+    const risultati = document.getElementById("risultati");
+    risultati.innerHTML = "";
+
+    let corrette = 0;
+
+    targhe.forEach((corretta, i) => {
+      const risposta = (inputs[i].value || '').toUpperCase().trim();
+      let confronto = "";
+      let match = 0;
+
+      for (let j = 0; j < 7; j++) {
+        const userChar = risposta[j] || "";
+        const trueChar = corretta[j];
+        if (userChar === trueChar) {
+          confronto += `<span class="carattere-giusto">${userChar}</span>`;
+          match++;
+        } else {
+          confronto += `<span class="carattere-sbagliato">${userChar || "_"}</span>`;
+        }
+      }
+
+      const precisione = ((match / 7) * 100).toFixed(1);
+      if (match === 7) corrette++;
+
+      risultati.innerHTML += `
+        <div style="margin-bottom: 20px;">
+          <strong>Targa ${i + 1}</strong><br />
+          Corretta: <span class="carattere-giusto">${corretta}</span><br />
+          Tua risposta: ${confronto}<br />
+          Precisione: ${precisione}% (${match}/7)
+        </div>
+        <hr />
+      `;
+    });
+
+    risultati.innerHTML += `<strong>✅ Totale corrette: ${corrette} su ${targhe.length}</strong>`;
+
+    risultati.scrollIntoView({ behavior: "smooth" });
+  }
+
+  document.getElementById("startBtn").addEventListener("click", iniziaTest);
+</script>
