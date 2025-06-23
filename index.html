@@ -114,6 +114,7 @@
     margin-top: 10px;
     opacity: 1;
     transition: opacity 0.5s ease;
+    font-variant-numeric: tabular-nums;
   }
 
   .fade-out {
@@ -264,7 +265,7 @@
 
 <div class="input-group">
   <label for="tempoMem">Tempo per memorizzare (secondi):</label>
-  <input type="number" id="tempoMem" min="1" max="30" value="5" />
+  <input type="number" id="tempoMem" min="0.1" max="3600" step="0.1" value="5" />
 </div>
 
 <div style="text-align:center;">
@@ -301,9 +302,9 @@
     clearInterval(intervalId);
 
     const num = parseInt(document.getElementById("numTarghe").value);
-    const tempo = parseInt(document.getElementById("tempoMem").value);
+    const tempo = parseFloat(document.getElementById("tempoMem").value);
     if (isNaN(num) || num < 1 || num > 10) return alert("Inserisci un numero di targhe da 1 a 10.");
-    if (isNaN(tempo) || tempo < 1 || tempo > 30) return alert("Inserisci un tempo da 1 a 30 secondi.");
+    if (isNaN(tempo) || tempo < 0.1 || tempo > 3600) return alert("Inserisci un tempo da 0.1 a 3600 secondi.");
 
     const targhe = Array.from({ length: num }, () => generaTarga());
 
@@ -326,11 +327,11 @@
     });
 
     let secondsLeft = tempo;
-    countdown.textContent = `⏳ ${secondsLeft}s`;
+    countdown.textContent = `⏳ ${secondsLeft.toFixed(1)}s`;
 
     intervalId = setInterval(() => {
-      secondsLeft--;
-      countdown.textContent = `⏳ ${secondsLeft}s`;
+      secondsLeft -= 0.1;
+      countdown.textContent = `⏳ ${Math.max(0, secondsLeft).toFixed(1)}s`;
       if (secondsLeft <= 0) {
         clearInterval(intervalId);
         countdown.textContent = "";
@@ -338,7 +339,8 @@
         targheContainer.innerHTML = "";
         mostraInput(targhe);
       }
-    }, 1000);
+    }, 100);
+
   }
 
   function mostraInput(targhe) {
@@ -409,3 +411,4 @@
 
   document.getElementById("startBtn").addEventListener("click", iniziaTest);
 </script>
+</html>
